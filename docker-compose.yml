@@ -14,6 +14,3 @@ services:
       - .:/usr/src/app
     ports:
       - 8083:8083
-    environment:
-      - DB_PATH=mysql+pymysql://root:123@db:3306/chatbot 
-      #- DB_PATH=mysql+pymysql://sql7377269:MutA4e46L1@sql7.freemysqlhosting.net:3306/sql7377269
