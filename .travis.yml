@@ -1,0 +1,13 @@
+sudo: required
+services:
+- docker
+language: python
+
+env:
+  global:
+  - DOCKER_IMAGE=jurebevc/chatbot-processing:1.0.0-$TRAVIS_JOB_NUMBER
+script:
+- docker build -t "$DOCKER_IMAGE" .
+after_success:
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+- docker push "$DOCKER_IMAGE"
