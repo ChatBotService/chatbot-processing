@@ -8,3 +8,6 @@ numpy==1.19.4
 PyMySQL==0.10.1
 cryptography
 psycopg2-binary
+requests
+py-healthcheck
+prometheus-flask-exporter

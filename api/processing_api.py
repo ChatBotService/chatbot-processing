@@ -3,9 +3,24 @@ from flask_restful import Resource
 from flask import request, jsonify, redirect, Response
 from models.models import *
 from util import processing
+import requests
+from flask import current_app as app
 
 class ProcessingAPI(Resource):
     def get(self):
+        stop_processing = False
+        try:
+            resp = requests.get(app.config["REMOTE_CONFIG_PATH"] + "/stop_processing")
+            if resp.ok:
+                stop_processing = resp.content.decode('utf-8') == "true"
+                print(resp.content.decode('utf-8'), flush=True)
+
+        except Exception as e:
+            pass
+
+        print("stop processing:", flush=True)
+        print(stop_processing, flush=True)
+
         #Return current processing queue status
         conversation_schema = ConversationFileSchema(many=True)
         return jsonify(conversation_schema.dump(processing.processing_queue))

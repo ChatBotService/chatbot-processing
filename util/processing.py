@@ -2,6 +2,8 @@ from util import train
 from models.models import *
 import threading
 from sqlalchemy.orm import scoped_session, sessionmaker
+import requests
+from flask import current_app as app
 
 processing_queue = []
 session_factory = None
@@ -31,6 +33,17 @@ def remove_from_queue(file_id):
     process_check()
 
 def process_check():
+    stop_processing = False
+    try:
+        resp = requests.get(app.config["REMOTE_CONFIG_PATH"] + "/stop_processing")
+        if resp.ok:
+            stop_processing = resp.content.decode('utf-8') == "true"
+    except:
+        print("Remote config not available.")
+
+    if stop_processing:
+        return;
+    
     print("Processing check...")
     global processing_thread
     global processing_queue

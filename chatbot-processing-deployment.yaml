@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatbot-processing-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chatbot-processing
+  template:
+    metadata:
+      labels:
+        app: chatbot-processing
+    spec:
+      containers:
+        - image: jurebevc/chatbot-processing:1.0.0-2.1
+          name: chatbot-processing
+          env:
+            - name: DB_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: db-path
+                  key: db-path
+          ports:
+            - containerPort: 8083
+              name: server
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: server
+            initialDelaySeconds: 20
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: server
+            periodSeconds: 3
