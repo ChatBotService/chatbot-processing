@@ -16,6 +16,7 @@ from prometheus_flask_exporter import PrometheusMetrics
 from util import processing
 
 import os
+import requests
 
 print("Running...", flush=True)
 
@@ -67,7 +68,6 @@ def health_check():
         resp = requests.get(app.config["REMOTE_CONFIG_PATH"] + "/stop_health")
         if resp.ok:
             stop_health = resp.content.decode('utf-8') == "true"
-            print(resp.content.decode('utf-8'), flush=True)
     except Exception as e:
         pass
     
