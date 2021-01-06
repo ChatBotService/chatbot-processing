@@ -13,7 +13,7 @@ spec:
         app: chatbot-processing
     spec:
       containers:
-        - image: jurebevc/chatbot-processing:1.0.0-2.1
+        - image: jurebevc/chatbot-processing:1.0.0-3.1
           name: chatbot-processing
           env:
             - name: DB_PATH
@@ -21,6 +21,11 @@ spec:
                 secretKeyRef:
                   name: db-path
                   key: db-path
+            - name: REMOTE_CONFIG_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: remote-config-path
+                  key: remote-config-path
           ports:
             - containerPort: 8083
               name: server
@@ -28,11 +33,11 @@ spec:
           livenessProbe:
             httpGet:
               path: /health/live
-              port: server
+              port: 8083
             initialDelaySeconds: 20
             periodSeconds: 3
           readinessProbe:
             httpGet:
               path: /health/ready
-              port: server
+              port: 8083
             periodSeconds: 3

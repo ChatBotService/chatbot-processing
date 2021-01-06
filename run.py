@@ -37,7 +37,8 @@ print("Database uri: ", flush=True)
 print(db_uri, flush=True)
 
 app.config["REMOTE_CONFIG_PATH"] = os.environ.get("REMOTE_CONFIG_PATH")
-
+print("Remote config path: ", flush=True)
+print(app.config.get("REMOTE_CONFIG_PATH"), flush=True)
 
 
 engine = create_engine(db_uri)
@@ -65,7 +66,7 @@ def health_check():
     try:
         resp = requests.get(app.config["REMOTE_CONFIG_PATH"] + "/stop_health")
         if resp.ok:
-            stop_processing = resp.content.decode('utf-8') == "true"
+            stop_health = resp.content.decode('utf-8') == "true"
             print(resp.content.decode('utf-8'), flush=True)
     except Exception as e:
         pass
