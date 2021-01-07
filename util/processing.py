@@ -33,17 +33,6 @@ def remove_from_queue(file_id):
     process_check()
 
 def process_check():
-    stop_processing = False
-    try:
-        resp = requests.get(app.config["REMOTE_CONFIG_PATH"] + "/stop_processing")
-        if resp.ok:
-            stop_processing = resp.content.decode('utf-8') == "true"
-    except:
-        print("Remote config not available.")
-
-    if stop_processing:
-        return;
-    
     print("Processing check...")
     global processing_thread
     global processing_queue
@@ -67,12 +56,19 @@ def background_process():
         bot_data = bot.save()
         print("Finished training bot " + conversation.name, flush=True)
         trained_model = TrainedModel(
-            name=conversation.name,
+            name=model_name,
             data=bytes(bot_data, 'utf-8'),
             data_size=len(bot_data),
             file_id = conversation.id)
         Session.add(trained_model)
         Session.commit()
     Session.remove()
+
+def prompt_bot(model, text, input_participant, learn_participant):
+    bot_data = model.data.decode("utf-8", "replace")
+    bot = train.load_bot_from_string(bot_data)
+    token_input = train.process_sentence(text)
+    response = bot.predict(token_input, input_participant, learn_participant)
+    return response
 
 processing_thread = threading.Thread(target=background_process)

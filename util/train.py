@@ -116,6 +116,11 @@ def load_bot(file, participant):
     
     return bot
 
+def load_bot_from_string(data):
+    bot = SimpleBot({})
+    bot.load(data)
+    return bot
+
 def main():
     global file_name
     global learn_participant
