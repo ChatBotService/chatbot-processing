@@ -13,7 +13,7 @@ spec:
         app: chatbot-processing
     spec:
       containers:
-        - image: jurebevc/chatbot-processing:1.0.0-4.1
+        - image: jurebevc/chatbot-processing:1.0.0-5.1
           name: chatbot-processing
           env:
             - name: DB_PATH
