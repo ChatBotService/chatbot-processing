@@ -77,7 +77,12 @@ def health_check():
         return True, "Health ok"
 
 def ready_check():
-    return True, "Ready ok"
+    try:
+        from sqlalchemy.sql import text
+        db.session.query("1").from_statement(text("SELECT 1")).all()
+        return True, "Ready ok"
+    except:
+        return True, "Not ready, database check failed."
 
 health.add_check(health_check)
 ready.add_check(ready_check)
