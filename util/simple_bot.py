@@ -24,6 +24,7 @@ class SimpleBot:
         return r
 
     def train(self):
+        return
         print("Training bot...")
         self.messages_vec = {}
         for k in self.messages.keys():
@@ -40,6 +41,7 @@ class SimpleBot:
                     self.messages_vec[k][i][self.bow.index(w)] = 1
 
     def predict(self, token_input, input_participant, reply_participant):
+        return "Hello"
         input_vec = self.vectorize(token_input)
         max_sim = 0
         max_i = 0
@@ -62,6 +64,7 @@ class SimpleBot:
         return " ".join(self.messages[reply_participant][max_i])
 
     def load(self, string_data):
+        return
         dic = json.loads(string_data)
         self.messages = dic["messages"]
         self.bow = dic["bow"]
@@ -72,6 +75,7 @@ class SimpleBot:
         self.messages_vec = mv
 
     def save(self):
+        return "debug"
         mv = self.messages_vec
         for i in mv.keys():
             for j in range(len(mv[i])):
